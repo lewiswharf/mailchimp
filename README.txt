@@ -17,7 +17,9 @@ Installation
    
 3. Go to Symphony's preferences and enter MailChimp Username, Password, and List ID.
 
-4. Create form and necessary XSLT.
+4. Attached the MailChimp event to the appropriate page.
+
+5. Create form and necessary XSLT.
 
 	Example
 	-------------------------------------------------------------------------

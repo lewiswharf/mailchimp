@@ -7,6 +7,8 @@ The MailChimp extension allows users to subscribe to a list.  Supports unlimited
 - Build Date: 10 March 2011
 - Requirements: Symphony 2.2
 
+##Install
+
 1. Upload the 'mailchimp' folder in this archive to your Symphony
    'extensions' folder.
 

@@ -16,8 +16,8 @@
 		}
 				
 		public function uninstall() {
-			$this->_Parent->Configuration->remove('mailchimp');
-			$this->_Parent->saveConfig();
+			Symphony::Configuration()->remove('mailchimp');
+			Symphony::Configuration()->saveConfig();
 		}
 		
 		public function getSubscribedDelegates() {
@@ -35,15 +35,15 @@
 	-------------------------------------------------------------------------*/
 		
 		public function getUser() {
-			return $this->_Parent->Configuration->get('user', 'mailchimp');
+			return Symphony::Configuration()->get('user', 'mailchimp');
 		}
 		
 		public function getPass() {
-			return $this->_Parent->Configuration->get('pass', 'mailchimp');
+			return Symphony::Configuration()->get('pass', 'mailchimp');
 		}
 		
 		public function getList() {
-			return $this->_Parent->Configuration->get('list', 'mailchimp');
+			return Symphony::Configuration()->get('list', 'mailchimp');
 		}
 		
 	/*-------------------------------------------------------------------------

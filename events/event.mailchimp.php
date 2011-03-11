@@ -11,7 +11,7 @@
 		public function __construct(&$parent, $env = null) {
 			parent::__construct($parent, $env);
 			
-			$this->_driver = $this->_Parent->ExtensionManager->create('mailchimp');
+			$this->_driver = Frontend::instance()->ExtensionManager->create('mailchimp');
 		}
 		
 		public static function about()

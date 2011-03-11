@@ -21,8 +21,8 @@
 						 'author' => array('name' => 'Mark Lewis',
 										   'website' => 'http://www.casadelewis.com',
 										   'email' => 'mark@casadelewis.com'),
-						 'version' => '1.0',
-						 'release-date' => '2009-05-8',
+						 'version' => '1.1',
+						 'release-date' => '2011-03-10',
 						 'trigger-condition' => 'action[subscribe]'
 						 );						 
 		}
@@ -49,7 +49,6 @@
 			$api = new MCAPI($this->_driver->getUser(), $this->_driver->getPass());
 
 			$cookies = new XMLElement("cookies");	
-			
 			foreach($merge as $key => $val)
 			{
 				if(!empty($val))
@@ -68,39 +67,8 @@
 							
 			$result->appendChild($cookies);
 			
-			if($merge['fname'] == '')
-			{
-				$error = new XMLElement('error', 'First name is required.');
-				$error->setAttribute("handle", 'fname');		
-
-				$result->appendChild($error);
-				$result->setAttribute("result", "error");		
-				
-				return $result;
-			}
-				
-			if($merge['lname'] == '')
-			{
-				$error = new XMLElement('error', 'Last name is required.');
-				$error->setAttribute("handle", 'lname');		
-
-				$result->appendChild($error);
-				$result->setAttribute("result", "error");		
-				
-				return $result;
-			}	
+			$mergeVars = $api->listMergeVars($this->_driver->getList());
 			
-			if($email == '')
-			{
-				$error = new XMLElement('error', 'E-mail is required.');
-				$error->setAttribute("handle", 'email');		
-
-				$result->appendChild($error);
-				$result->setAttribute("result", "error");		
-				
-				return $result;
-			}
-				
 			if(!ereg('^[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.(([0-9]{1,3})|([a-zA-Z]{2,3})|(aero|coop|info|museum|name))$', $email))
 			{
 				$error = new XMLElement('error', 'E-mail is invalid.');
@@ -112,10 +80,20 @@
 				return $result;
 			}	
 																		
-			if(!$api->listSubscribe($this->_driver->getList(), $email, array_change_key_case($merge, CASE_UPPER)))
+			if(!$api->listSubscribe($this->_driver->getList(), $email, $merge))
 			{
-				$result->setAttribute("result", "error");		
-				$error = new XMLElement("error", $api->errorMessage);									
+				$result->setAttribute("result", "error");
+				
+				foreach($mergeVars as $var) {
+					
+					$errorMessage = str_replace($var['tag'], $var['name'], $api->errorMessage, $count);
+				    if($count == 1) {
+						$error = new XMLElement("error", $errorMessage);	
+						break;								
+					} else {
+						$error = new XMLElement("error", $api->errorMessage);									
+					}
+				}
 				$result->appendChild($error);
 			}
 			else

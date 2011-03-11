@@ -17,7 +17,7 @@
 				
 		public function uninstall() {
 			Symphony::Configuration()->remove('mailchimp');
-			Symphony::Configuration()->saveConfig();
+			Symphony::Configuration()>saveConfig();
 		}
 		
 		public function getSubscribedDelegates() {

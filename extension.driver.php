@@ -6,12 +6,12 @@
 	
 		public function about(){
 			return array('name' => 'MailChimp',
-						 'version' => '1.0',
-						 'release-date' => '2009-05-8',
+						 'version' => '1.1',
+						 'release-date' => '2011-03-10',
 						 'author' => array('name' => 'Mark Lewis',
 										   'website' => 'http://www.casadelewis.com',
 										   'email' => 'mark@casadelewis.com'),
-						 'description' => 'Supports subscribing a new address, first name, last name to your MailChimp account.'
+						 'description' => 'Subscribe users to a MailChimp list.'
 				 		);
 		}
 				

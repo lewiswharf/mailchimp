@@ -35,7 +35,7 @@
 
 		public static function documentation()
 		{
-			return new XMLElement('p', 'Subscribes e-mail address to Mailchimp list.');
+			return new XMLElement('p', 'Subscribes user to a MailChimp list.');
 		}
 		
 		protected function __trigger()

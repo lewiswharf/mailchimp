@@ -40,26 +40,11 @@
 		
 		protected function __trigger()
 		{			
-			$email = $_POST['email'];
-			
-			$merge = $_POST['merge'];
-
 			$result = new XMLElement("mailchimp");			
-			
-			$api = new MCAPI($this->_driver->getUser(), $this->_driver->getPass());
-
 			$cookies = new XMLElement("cookies");	
-			foreach($merge as $key => $val)
-			{
-				if(!empty($val))
-				{
-				$cookie = new XMLElement('cookie', $val);
-				$cookie->setAttribute("handle", $key);		
 
-				$cookies->appendChild($cookie);
-				}
-			}
-			
+			$email = $_POST['email'];
+						
 			$cookie = new XMLElement('cookie', $email);
 			$cookie->setAttribute("handle", 'email');		
 
@@ -67,7 +52,21 @@
 							
 			$result->appendChild($cookies);
 			
-			$mergeVars = $api->listMergeVars($this->_driver->getList());
+			$api = new MCAPI($this->_driver->getUser(), $this->_driver->getPass());
+
+			if($mergeVars = $api->listMergeVars($this->_driver->getList())) {
+				$merge = $_POST['merge'];
+				foreach($merge as $key => $val)
+				{
+					if(!empty($val))
+					{
+					$cookie = new XMLElement('cookie', $val);
+					$cookie->setAttribute("handle", $key);		
+	
+					$cookies->appendChild($cookie);
+					}
+				}
+			}
 			
 			if(!ereg('^[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.(([0-9]{1,3})|([a-zA-Z]{2,3})|(aero|coop|info|museum|name))$', $email))
 			{
@@ -84,15 +83,16 @@
 			{
 				$result->setAttribute("result", "error");
 				
-				foreach($mergeVars as $var) {
-					
-					$errorMessage = str_replace($var['tag'], $var['name'], $api->errorMessage, $count);
-				    if($count == 1) {
-						$error = new XMLElement("error", $errorMessage);	
-						break;								
-					} else {
-						$error = new XMLElement("error", $api->errorMessage);									
+				if(is_array($mergeVars)){
+					foreach($mergeVars as $var) {
+						$errorMessage = str_replace($var['tag'], $var['name'], $api->errorMessage, $count);
+						if($count == 1) {
+							$error = new XMLElement("error", $errorMessage);	
+							break;								
+						}
 					}
+				} else {
+					$error = new XMLElement("error", $api->errorMessage);									
 				}
 				$result->appendChild($error);
 			}

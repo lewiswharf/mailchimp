@@ -53,8 +53,10 @@
 			$result->appendChild($cookies);
 			
 			$api = new MCAPI($this->_driver->getUser(), $this->_driver->getPass());
-
-			if($mergeVars = $api->listMergeVars($this->_driver->getList())) {
+			
+			$mergeVars = $api->listMergeVars($this->_driver->getList());
+			
+			if(count($mergeVars) > 1) {
 				$merge = $_POST['merge'];
 				foreach($merge as $key => $val)
 				{
@@ -79,11 +81,13 @@
 				return $result;
 			}	
 																		
+			if(count($mergeVars) == 1) $merge ='';
+			
 			if(!$api->listSubscribe($this->_driver->getList(), $email, $merge))
 			{
 				$result->setAttribute("result", "error");
 				
-				if(is_array($mergeVars)){
+				if(count($mergeVars) > 1){
 					foreach($mergeVars as $var) {
 						$errorMessage = str_replace($var['tag'], $var['name'], $api->errorMessage, $count);
 						if($count == 1) {

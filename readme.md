@@ -1,6 +1,6 @@
 #MailChimp
 
-The MailChimp extension allows users to subscribe to a list.  Supports unlimited number of merge fields.
+The MailChimp extension allows users to subscribe to a list and supports unlimited number of merge fields.
 
 - Version: 1.1
 - Author: Mark Lewis <mark@casadelewis.com>

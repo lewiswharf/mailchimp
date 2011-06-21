@@ -21,8 +21,8 @@
 						 'author' => array('name' => 'Mark Lewis',
 										   'website' => 'http://www.casadelewis.com',
 										   'email' => 'mark@casadelewis.com'),
-						 'version' => '1.11',
-						 'release-date' => '2011-03-23',
+						 'version' => '1.13',
+						 'release-date' => '2011-06-21',
 						 'trigger-condition' => 'action[subscribe]'
 						 );						 
 		}

@@ -52,7 +52,7 @@
 							
 			$result->appendChild($cookies);
 			
-			$api = new MCAPI($this->_driver->getUser(), $this->_driver->getPass());
+			$api = new MCAPI($this->_driver->getKey());
 			
 			$mergeVars = $api->listMergeVars($this->_driver->getList());
 			

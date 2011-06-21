@@ -34,12 +34,8 @@
 		Utilities:
 	-------------------------------------------------------------------------*/
 		
-		public function getUser() {
-			return Symphony::Configuration()->get('user', 'mailchimp');
-		}
-		
-		public function getPass() {
-			return Symphony::Configuration()->get('pass', 'mailchimp');
+		public function getKey() {
+			return Symphony::Configuration()->get('key', 'mailchimp');
 		}
 		
 		public function getList() {
@@ -60,25 +56,19 @@
 			$group = new XMLElement('div');
 			$group->setAttribute('class', 'group');
 
-			$user = Widget::Label('Username');
-			$user->appendChild(Widget::Input(
-				'settings[mailchimp][user]', General::Sanitize($this->getUser())
+			$api = Widget::Label('API Key');
+			$api->appendChild(Widget::Input(
+				'settings[mailchimp][key]', General::Sanitize($this->getKey())
 			));
-			$group->appendChild($user);
+			$group->appendChild($api);
 			
-			$pass = Widget::Label('Password');
-			$pass->appendChild(Widget::Input(
-				'settings[mailchimp][pass]', General::Sanitize($this->getPass()), 'password'
-			));
-			$group->appendChild($pass);
-
-			$fieldset->appendChild($group);
-
 			$list = Widget::Label('List ID');
 			$list->appendChild(Widget::Input(
 				'settings[mailchimp][list]', General::Sanitize($this->getList())
 			));
-			$fieldset->appendChild($list);
+			$group->appendChild($list);
+
+			$fieldset->appendChild($group);
 
 			$context['wrapper']->appendChild($fieldset);			
 		}

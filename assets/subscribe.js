@@ -49,6 +49,9 @@
 				
 				// gets the POST params
 				var data = t.serialize();
+				
+				// adds the bouton field
+				data += '&' + escape('action[signup]') + '=Send';
 			
 				// ajax request
 				$.ajax({

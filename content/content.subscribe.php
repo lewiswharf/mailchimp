@@ -19,32 +19,28 @@
 		protected $_event = null;
 		
 		/**
-		 * Object ctor
-		 * @param $parent Administration class
-		 */
-		public function __construct($parent) {
-			// call the parent ctor
-			parent::__construct($parent);
-			
-			// creates a mail chimp event 
-			$this->_event = new eventMailchimp($parent, array());
-		}
-		
-		/**
 		 * Method that build the result send to the client
 		 */
 		public function view() {
+			// creates a mail chimp event 
+			$this->_event = new eventMailchimp($parent, array());
+			
 			// gets the output
-			$output = $this->_event.load();
+			$output = $this->_event->load();
+			
+			// converts object to string
+			if ($output instanceof XMLElement) {
+				$output = $output->generate();
+			}
 			
 			if (strlen($output) < 1) {
 				// no output, must manage error
 				$output = __('Error');
 			}
 			
-			$this->_Result = $output;
+			$this->_Result = json_encode($output);
 			
-			var_dump($this->_Result);
+			//var_dump($this->_Result);
 		}
 		
 		/**
@@ -57,7 +53,7 @@
 		}
 		
 		/**
-		 * Overrides the default autorisation failed mechanisism
+		 * Overrides the default autorisation failed mechanism
 		 */
 		public function handleFailedAuthorisation(){
 			// do nothing, we do not want any autorisation on this page

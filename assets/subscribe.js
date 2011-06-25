@@ -59,7 +59,27 @@
 					url: opts.url,
 					data: data,
 					dataType: 'json',
-					success: opts.complete,
+					success: function (data) {
+					
+						if (!data.error && data['@attributes'] && data['@attributes'].result == 'success') {
+							
+							if (data['@attributes'].result) {
+								
+								if ($.isFunction(opts.complete)) {
+									opts.complete.call(t, data);
+								}
+								
+							} 
+							
+						} else {
+							
+							if ($.isFunction(opts.error)) {
+								opts.error.call(t, data);
+							}
+						}
+						
+					
+					} ,
 					error: opts.error
 				});
 				

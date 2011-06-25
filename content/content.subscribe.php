@@ -10,7 +10,7 @@
 	/**
 	 * This class wraps around the event.mailchimp.php class for
 	 * extending the event into an Ajax request
-	 * @author nicolasbrassard
+	 * @author nicolasbrassard - http://www.nitriques.com
 	 *
 	 */
 	Class contentExtensionMailchimpSubscribe extends JSONPage {

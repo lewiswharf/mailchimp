@@ -25,17 +25,23 @@
 			// gets the output
 			$output = $_event->load();
 			
-			// converts object to string
+			// converts object to array
 			if ($output instanceof XMLElement) {
-				$output = $output->generate();
+				try {
+					$output = $output->generate();
+					$output = (array) simplexml_load_string($output);
+				} catch (Exception $e) {
+					// do nothing
+					$output = '';
+				}
 			}
 			
 			if (strlen($output) < 1) {
 				// no output, must manage error
-				$output = array('error' => __('Error'));
+				$output = array('error' => __('Error, could not process the request'));
 			}
 			
-			$this->_Result = json_encode((array) simplexml_load_string($output));
+			$this->_Result = json_encode($output);
 			
 			//var_dump($this->_Result);
 		}

@@ -41,18 +41,21 @@
 				$output = array('error' => __('Error, could not process the request'));
 			}
 			
+			// set body of the response
 			$this->_Result = json_encode($output);
-			
-			//var_dump($this->_Result);
 		}
 		
 	}
 	
-	
+	/**
+	 * Abstract class that sets basic params for a JSON page
+	 * @author nicolasbrassard
+	 *
+	 */
 	Abstract Class JSONPage extends Page {
 		
 		/**
-		 * Method that build the result send to the client
+		 * Method that builds the result send to the client
 		 */
 		public abstract function view();
 		
@@ -72,17 +75,11 @@
 			exit;
 		}
 		
+		/**
+		 * Dummy method to be compatible with normal Administration pages
+		 */
 		public function build() {
 			return $this->generate();
 		}
-		
-		/**
-		 * Overrides the default autorisation failed mechanism
-		 */
-		/*public function handleFailedAuthorisation(){
-			// do nothing, we do not want any autorisation on this page
-			$this->_status = self::STATUS_OK;
-			//exit;
-		}*/
 		
 	}

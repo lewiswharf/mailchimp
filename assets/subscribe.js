@@ -1,19 +1,27 @@
-/* simple jquery plugin for the mail chimp ajax form */
+/**
+ * Simple jquery plugin for the mail chimp ajax form
+ * 
+ * As for the normal use of this extention, be sure to include all merge fields
+ * 
+ * Basic Usage
+ * 
+ * $('#the-form').mailchimp({
+ * 		complete: completeCallback(data), // this is set to #the-form
+ * 		error: errorCallback(data) // data.error -> error message
+ * });
+ * 
+ * @author nicolasbrassard - http://www.nitriques.com
+ *  */
 
 (function ($, undefined) {
 	
 	var defaults = {
-		/*emailField : '#email',
-		mergeFields : [
-		               {'FNAME': '#fname'},
-		               {'LNAME': '#lname'}
-		              ],*/
 		complete : $.noop,
 		error: $.noop,
 		url: '/symphony/extension/mailchimp/subscribe/'
 	};
 	
-	// actual plusgin
+	// actual plugin
 	function mailchimp(options) {
 		var t = $(this),
 			opts = $.extend({}, defaults, options);
@@ -33,24 +41,10 @@
 					e.preventDefault();
 				}
 				
-				/*var data = {
-						email : $(opts.emailField, t).val()
-				}
-				
-				// merge fields
-				for (var m in opts.mergeFields) {
-					alert(m);
-					
-					var f = opts.mergeFields[m],
-						val = $(f[1], t).val();
-					
-					data['merge['+f[0]+']'] = val;
-				}*/
-				
 				// gets the POST params
 				var data = t.serialize();
 				
-				// adds the bouton field
+				// adds the button field
 				data += '&' + escape('action[signup]') + '=Send';
 			
 				// ajax request
@@ -68,7 +62,6 @@
 								if ($.isFunction(opts.complete)) {
 									opts.complete.call(t, data);
 								}
-								
 							} 
 							
 						} else {
@@ -77,10 +70,13 @@
 								opts.error.call(t, data);
 							}
 						}
-						
-					
 					} ,
-					error: opts.error
+					error: function (data) {
+						
+						if ($.isFunction(opts.error)) {
+							opts.error.call(t, data);
+						}
+					}
 				});
 				
 				return false;

@@ -26,10 +26,10 @@ The MailChimp extension allows users to subscribe to a list and supports unlimit
 	2. Call plugin.
 
 
-	$('#the-form').mailchimp({
-		complete: completeCallback(data), // "this" keyword is set to #the-form
-		error: errorCallback(data) // data.error -> error message
-	})
+				$('#the-form').mailchimp({
+					complete: completeCallback(data), // "this" keyword is set to #the-form
+					error: errorCallback(data) // data.error -> error message
+				})
 
 
 ##Example

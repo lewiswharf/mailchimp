@@ -25,10 +25,12 @@ The MailChimp extension allows users to subscribe to a list and supports unlimit
 	1. Link javascript file /extensions/mailchimp/assets/subscribe.js
 	2. Call plugin.
 
+
 		$('#the-form').mailchimp({
 			complete: completeCallback(data), // "this" keyword is set to #the-form
 			error: errorCallback(data) // data.error -> error message
 		})
+
 
 ##Example
 

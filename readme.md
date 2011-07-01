@@ -2,7 +2,7 @@
 
 The MailChimp extension allows users to subscribe to a list and supports unlimited number of merge fields.
 
-- Version: 1.13
+- Version: 1.14
 - Author: Mark Lewis <mark@casadelewis.com>
 - Build Date: 21 June 2011
 - Requirements: Symphony 2.2
@@ -21,6 +21,15 @@ The MailChimp extension allows users to subscribe to a list and supports unlimit
 
 5. Create form and necessary XSLT. **Any extra fields for the list defined in MailChimp must be declared in your form.**
 
+6. Ajax (optional)
+	1. Link javascript file /extensions/mailchimp/assets/subscribe.js
+	2. Call plugin.
+
+	$('#the-form').mailchimp({
+		complete: completeCallback(data), // "this" keyword is set to #the-form
+		error: errorCallback(data) // data.error -> error message
+	})
+
 ##Example
 
 	<xsl:choose>
@@ -33,7 +42,7 @@ The MailChimp extension allows users to subscribe to a list and supports unlimit
 			<xsl:if test="events/mailchimp[@result = 'error'] ">
 				<p class="error"><xsl:value-of select="events/mailchimp/error" /></p>
 			</xsl:if>
-			<form method="post" action="" enctype="multipart/form-data">
+			<form id="the-form" method="post" action="" enctype="multipart/form-data">
 			<fieldset>
 				<label>
 					First Name <small>(required)</small>
@@ -62,6 +71,7 @@ The MailChimp extension allows users to subscribe to a list and supports unlimit
 
 ##Change Log
 
++ 1.14 - Ajax capability added (Thanks nitriques).
 + 1.13 - Switched from login/password to using the API key for authentication. MailChimp has deprecated the former. Clarified directions regarding merge fields.
 + 1.12 - Updated wrapper for API 1.3
 + 1.11 - Fixed bug to allow email address only form

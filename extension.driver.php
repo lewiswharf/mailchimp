@@ -6,8 +6,8 @@
 	
 		public function about(){
 			return array('name' => 'MailChimp',
-						 'version' => '1.13',
-						 'release-date' => '2011-06-21',
+						 'version' => '1.14',
+						 'release-date' => '2011-07-01',
 						 'author' => array('name' => 'Mark Lewis',
 										   'website' => 'http://www.casadelewis.com',
 										   'email' => 'mark@casadelewis.com'),

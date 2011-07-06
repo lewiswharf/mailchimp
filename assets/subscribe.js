@@ -18,7 +18,7 @@
 	var defaults = {
 		complete : $.noop,
 		error: $.noop,
-		url: '/symphony/extension/mailchimp/subscribe/'
+		url: '/symphony/extension/mailchimp/login/'
 	};
 	
 	// actual plugin

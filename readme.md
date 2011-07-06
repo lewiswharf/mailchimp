@@ -27,10 +27,11 @@ The MailChimp extension allows users to subscribe to a list and supports unlimit
 
 
 				$('#the-form').mailchimp({
-					complete: completeCallback(data), // "this" keyword is set to #the-form
+					complete: completeCallback(data),
 					error: errorCallback(data) // data.error -> error message
 				})
-
+	Note: In the callbacks (error and complete) the context of the function (the "this" keyword) will be
+	set to #the-form. The "data" parameters contains all the values in the event XML as JSON.
 
 ##Example
 

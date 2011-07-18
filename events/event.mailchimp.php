@@ -5,17 +5,17 @@
 	include_once(EXTENSIONS . '/mailchimp/lib/class.mcapi.php');
 
 	Class eventMailchimp extends Event
-	{		
+	{
 		protected $_driver = null;
-		
+
 		public function __construct(&$parent, $env = null) {
 			parent::__construct($parent, $env);
-			
-			$this->_driver = Frontend::instance()->ExtensionManager->create('mailchimp');
+
+			$this->_driver = Symphony::$ExtensionManager->create('mailchimp');
 		}
-		
+
 		public static function about()
-		{								
+		{
 			return array(
 						 'name' => 'MailChimp',
 						 'author' => array('name' => 'Mark Lewis',
@@ -24,11 +24,11 @@
 						 'version' => '1.13',
 						 'release-date' => '2011-06-21',
 						 'trigger-condition' => 'action[subscribe]'
-						 );						 
+						 );
 		}
-				
+
 		public function load()
-		{	
+		{
 			if(isset($_POST['action']['signup']))
 				return $this->__trigger();
 		}
@@ -37,25 +37,25 @@
 		{
 			return new XMLElement('p', 'Subscribes user to a MailChimp list.');
 		}
-		
+
 		protected function __trigger()
-		{			
-			$result = new XMLElement("mailchimp");			
-			$cookies = new XMLElement("cookies");	
+		{
+			$result = new XMLElement("mailchimp");
+			$cookies = new XMLElement("cookies");
 
 			$email = $_POST['email'];
-						
+
 			$cookie = new XMLElement('cookie', $email);
-			$cookie->setAttribute("handle", 'email');		
+			$cookie->setAttribute("handle", 'email');
 
 			$cookies->appendChild($cookie);
-							
+
 			$result->appendChild($cookies);
-			
+
 			$api = new MCAPI($this->_driver->getKey());
-			
+
 			$mergeVars = $api->listMergeVars($this->_driver->getList());
-			
+
 			if(count($mergeVars) > 1) {
 				$merge = $_POST['merge'];
 				foreach($merge as $key => $val)
@@ -63,50 +63,50 @@
 					if(!empty($val))
 					{
 					$cookie = new XMLElement('cookie', $val);
-					$cookie->setAttribute("handle", $key);		
-	
+					$cookie->setAttribute("handle", $key);
+
 					$cookies->appendChild($cookie);
 					}
 				}
 			}
-			
+
 			if(!ereg('^[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.(([0-9]{1,3})|([a-zA-Z]{2,3})|(aero|coop|info|museum|name))$', $email))
 			{
 				$error = new XMLElement('error', 'E-mail is invalid.');
-				$error->setAttribute("handle", 'email');		
+				$error->setAttribute("handle", 'email');
 
 				$result->appendChild($error);
-				$result->setAttribute("result", "error");		
-				
+				$result->setAttribute("result", "error");
+
 				return $result;
-			}	
-																		
+			}
+
 			if(count($mergeVars) == 1) $merge ='';
-			
+
 			if(!$api->listSubscribe($this->_driver->getList(), $email, $merge))
 			{
 				$result->setAttribute("result", "error");
-				
+
 				if(count($mergeVars) > 1){
 					foreach($mergeVars as $var) {
 						$errorMessage = str_replace($var['tag'], $var['name'], $api->errorMessage, $count);
 						if($count == 1) {
-							$error = new XMLElement("error", $errorMessage);	
-							break;								
+							$error = new XMLElement("error", $errorMessage);
+							break;
 						}
 					}
 				} else {
-					$error = new XMLElement("error", $api->errorMessage);									
+					$error = new XMLElement("error", $api->errorMessage);
 				}
 				$result->appendChild($error);
 			}
 			else
 			{
-				$result->setAttribute("result", "success");	
+				$result->setAttribute("result", "success");
 			}
-			
+
 			return $result;
-		}		
+		}
 	}
 
 ?>

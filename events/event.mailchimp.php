@@ -81,13 +81,16 @@
 				return $result;
 			}
 
-			if(count($mergeVars) == 1) $merge ='';
+			if(count($mergeVars) == 1) {
+				$merge ='';
+			}
 
-			if(!$api->listSubscribe($this->_driver->getList(), $email, $merge))
-			{
+			if(!$api->listSubscribe($this->_driver->getList(), $email, $merge)) {
 				$result->setAttribute("result", "error");
 
+				// try to match mergeVars with error
 				if(count($mergeVars) > 1){
+					// replace
 					foreach($mergeVars as $var) {
 						$errorMessage = str_replace($var['tag'], $var['name'], $api->errorMessage, $count);
 						if($count == 1) {
@@ -95,13 +98,18 @@
 							break;
 						}
 					}
-				} else {
-					$error = new XMLElement("error", $api->errorMessage);
 				}
+
+				// no error message found with merge vars in it
+				if ($error == null) {
+					$msg = $api->errorMessage;
+					$error = new XMLElement("error", strlen($msg) > 0 ? $msg : 'Unknow error');
+				}
+
 				$result->appendChild($error);
+
 			}
-			else
-			{
+			else {
 				$result->setAttribute("result", "success");
 			}
 

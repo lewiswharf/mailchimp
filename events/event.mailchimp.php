@@ -103,6 +103,10 @@
 				// no error message found with merge vars in it
 				if ($error == null) {
 					$msg = $api->errorMessage;
+
+					// replace ampersands and replace to make XML happy
+					$msg = str_replace('&', '&amp;', $msg);
+
 					$error = new XMLElement("error", strlen($msg) > 0 ? $msg : 'Unknow error');
 				}
 

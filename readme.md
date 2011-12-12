@@ -2,9 +2,9 @@
 
 The MailChimp extension allows users to subscribe to a list and supports unlimited number of merge fields.
 
-- Version: 1.17
+- Version: 1.18
 - Author: Mark Lewis <mark@casadelewis.com>
-- Build Date: 29 September 2011
+- Build Date: 11 December 2011
 - Requirements: Symphony 2.2
 
 ##Install
@@ -15,7 +15,7 @@ The MailChimp extension allows users to subscribe to a list and supports unlimit
 2. Enable it by selecting the "MailChimp" item under Extensions, choose Enable
    from the with-selected menu, then click Apply.
    
-3. Go to Symphony's preferences and enter MailChimp Username, Password, and List ID.
+3. Go to Symphony's preferences and enter MailChimp API Key and List ID.
 
 4. Attach the MailChimp event to the appropriate page.
 
@@ -73,6 +73,7 @@ The MailChimp extension allows users to subscribe to a list and supports unlimit
 
 
 ##Change Log
++ 1.18 - Fix a bug to handle `&` from MailChimp in error messages.
 + 1.17 - Fix a bug where $output could be `mixed` (Thanks nitriques).
 + 1.16 - A couple bug fixes including [issue #3](https://github.com/lewiswharf/mailchimp/issues/3).
 + 1.15 - Ajax bug fix.

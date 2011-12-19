@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension id="mailchimp" status="released" xmlns="http://symphony-cms.com/schemas/extension/1.0">
+	<name>MailChimp</name>
+	<description>Subscribe users to a MailChimp mailing list</description>
+	<repo type="github">https://github.com/lewiswharf/mailchimp</repo>
+	<url type="discuss">http://symphony-cms.com/discuss/thread/32883/</url>
+	<types>
+		<type>Events</type>
+		<type>Third Party Integration</type>
+	</types>
+	<authors>
+		<author>
+			<name github="lewiswharf" symphony="Lewis">Mark Lewis</name>
+			<website>http://casadelewis.com</website>
+		</author>
+	</authors>
+	<releases>
+		<release version="1.18" date="2011-12-11" min="2.2" />
+	</releases>
+</extension>

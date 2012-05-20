@@ -2,11 +2,6 @@
 
 The MailChimp extension allows users to subscribe to a list and supports unlimited number of merge fields.
 
-- Version: 1.18
-- Author: Mark Lewis <mark@casadelewis.com>
-- Build Date: 11 December 2011
-- Requirements: Symphony 2.2
-
 ##Install
 
 1. Upload the 'mailchimp' folder in this archive to your Symphony

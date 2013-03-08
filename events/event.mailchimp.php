@@ -22,7 +22,7 @@
 										   'website' => 'http://www.casadelewis.com',
 										   'email' => 'mark@casadelewis.com'),
 						 'version' => '1.15',
-						 'release-date' => '2011-12-11',
+						 'release-date' => '2013-03-08',
 						 'trigger-condition' => 'action[subscribe]'
 						 );
 		}
@@ -113,9 +113,12 @@
 				$result->appendChild($error);
 
 			}
-			else {
-				$result->setAttribute("result", "success");
+			elseif(isset($_REQUEST['redirect'])) {
+                redirect($_REQUEST['redirect']);
 			}
+            else {
+                $result->setAttribute("result", "success");
+            }
 
 			return $result;
 		}

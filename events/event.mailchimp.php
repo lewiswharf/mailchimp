@@ -8,8 +8,8 @@
 	{
 		protected $_driver = null;
 
-		public function __construct(&$parent, $env = null) {
-			parent::__construct($parent, $env);
+		public function __construct() {
+			parent::__construct();
 
 			$this->_driver = Symphony::ExtensionManager()->create('mailchimp');
 		}
@@ -29,6 +29,7 @@
 
 		public function load()
 		{
+			var_dump($_POST);die;
 			if(isset($_POST['action']['signup']))
 				return $this->__trigger();
 		}
@@ -53,6 +54,7 @@
 			$result->appendChild($cookies);
 
 			$api = new MCAPI($this->_driver->getKey());
+			
 
 			$mergeVars = $api->listMergeVars($this->_driver->getList());
 
@@ -114,11 +116,11 @@
 
 			}
 			elseif(isset($_REQUEST['redirect'])) {
-                redirect($_REQUEST['redirect']);
+				redirect($_REQUEST['redirect']);
 			}
-            else {
-                $result->setAttribute("result", "success");
-            }
+			else {
+				$result->setAttribute("result", "success");
+			}
 
 			return $result;
 		}

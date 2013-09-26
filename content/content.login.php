@@ -21,7 +21,7 @@
 		 */
 		public function view() {
 			// creates a mail chimp event
-			$_event = new eventMailchimp($parent, array());
+			$_event = new eventMailchimp();
 
 			// gets the output
 			$output = $_event->load();

@@ -29,7 +29,6 @@
 
 		public function load()
 		{
-			var_dump($_POST);die;
 			if(isset($_POST['action']['signup']))
 				return $this->__trigger();
 		}

@@ -6,6 +6,43 @@
 	require_once(TOOLKIT . '/class.page.php');
 	require_once(CORE . '/class.frontend.php');
 	require_once(EXTENSIONS . '/mailchimp/events/event.mailchimp.php');
+	
+	/**
+	 * Abstract class that sets basic params for a JSON page
+	 * @author nicolasbrassard
+	 *
+	 */
+	Abstract Class JSONPage extends Page {
+
+		/**
+		 * Method that builds the result send to the client
+		 */
+		public abstract function view();
+
+		/**
+		 * Generate the output
+		 */
+		public function generate(){
+			header('Content-Type: application/json');
+
+			// tryed this, not working
+			//$this->addHeaderToPage('Content-Type','application/json');
+
+			// creates the output
+			$this->view();
+
+			echo $this->_Result;
+			exit;
+		}
+
+		/**
+		 * Dummy method to be compatible with normal Administration pages
+		 */
+		public function build() {
+			return $this->generate();
+		}
+
+	}
 
 	/**
 	 * This class wraps around the event.mailchimp.php class for
@@ -46,43 +83,6 @@
 
 			// set body of the response
 			$this->_Result = json_encode($output);
-		}
-
-	}
-
-	/**
-	 * Abstract class that sets basic params for a JSON page
-	 * @author nicolasbrassard
-	 *
-	 */
-	Abstract Class JSONPage extends Page {
-
-		/**
-		 * Method that builds the result send to the client
-		 */
-		public abstract function view();
-
-		/**
-		 * Generate the output
-		 */
-		public function generate(){
-			header('Content-Type: application/json');
-
-			// tryed this, not working
-			//$this->addHeaderToPage('Content-Type','application/json');
-
-			// creates the output
-			$this->view();
-
-			echo $this->_Result;
-			exit;
-		}
-
-		/**
-		 * Dummy method to be compatible with normal Administration pages
-		 */
-		public function build() {
-			return $this->generate();
 		}
 
 	}

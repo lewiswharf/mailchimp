@@ -15,6 +15,9 @@
 		</author>
 	</authors>
 	<releases>
+		<release version="1.21" date="2013-09-27" min="2.3.x">
+		- Fixed Ajax issue (nitriques)
+		</release>
 		<release version="1.20" date="2013-03-08" min="2.3.x">
 		- Added support for redirect on success.
 		</release>

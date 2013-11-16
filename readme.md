@@ -4,27 +4,22 @@ The MailChimp extension allows users to subscribe to a list and supports unlimit
 
 ##Install
 
-1. Upload the 'mailchimp' folder in this archive to your Symphony
-   'extensions' folder.
-
+1. Upload the `/mailchimp` in this archive to your Symphony
+   `/extensions` folder.
 2. Enable it by selecting the "MailChimp" item under Extensions, choose Enable
    from the with-selected menu, then click Apply.
-   
-3. Go to Symphony's preferences and enter MailChimp API Key and List ID.
-
+3. Go to Symphony's preferences and enter MailChimp API Key and List ID (optional).
 4. Attach the MailChimp event to the appropriate page.
-
 5. Create form and necessary XSLT. **Any extra fields for the list defined in MailChimp must be declared in your form.**
-
 6. Ajax (optional)
-	1. Link javascript file /extensions/mailchimp/assets/subscribe.js
+	1. Link javascript file `/extensions/mailchimp/assets/subscribe.js`
 	2. Call plugin.
 
+			$('#the-form').mailchimp({
+				complete: completeCallback(data),
+				error: errorCallback(data) // data.error -> error message
+			})
 
-				$('#the-form').mailchimp({
-					complete: completeCallback(data),
-					error: errorCallback(data) // data.error -> error message
-				})
 	Note: In the callbacks (error and complete) the context of the function (the "this" keyword) will be
 	set to #the-form. The "data" parameters contains all the values in the event XML as JSON.
 
@@ -54,6 +49,7 @@ The MailChimp extension allows users to subscribe to a list and supports unlimit
 					E-Mail Address <small>(required)</small>
 					<input type="text" name="email" value="{events/mailchimp/cookies/cookie[@handle = 'email']}" />
 				</label>
+				<input type="hidden" name="list" value="{your-list-id}" />
 				<input id="submit" type="submit" name="action[signup]" value="Sign me up" />
 				</fieldset>
 			</form>
@@ -68,6 +64,7 @@ The MailChimp extension allows users to subscribe to a list and supports unlimit
 
 
 ##Change Log
++ 2.0 - Upgrade wrapper to API 2. Allow List ID to be overidden
 + 1.18 - Fix a bug to handle `&` from MailChimp in error messages.
 + 1.17 - Fix a bug where $output could be `mixed` (Thanks nitriques).
 + 1.16 - A couple bug fixes including [issue #3](https://github.com/lewiswharf/mailchimp/issues/3).

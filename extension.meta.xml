@@ -3,7 +3,7 @@
 	<name>MailChimp</name>
 	<description>Subscribe users to a MailChimp mailing list</description>
 	<repo type="github">https://github.com/lewiswharf/mailchimp</repo>
-	<url type="discuss">http://symphony-cms.com/discuss/thread/32883/</url>
+	<url type="discuss">http://getsymphony.com/discuss/thread/32883/</url>
 	<types>
 		<type>Events</type>
 		<type>Third Party Integration</type>
@@ -13,15 +13,24 @@
 			<name github="lewiswharf" symphony="Lewis">Mark Lewis</name>
 			<website>http://casadelewis.com</website>
 		</author>
+		<author>
+			<name github="brendo" symphony="brendo">Brendan Abbott</name>
+			<website>http://www.bloodbone.ws</website>
+		</author>
 	</authors>
 	<releases>
-		<release version="1.21" date="2013-09-27" min="2.3.x">
-		- Fixed Ajax issue (nitriques)
+		<release version="2.0" date="2013-11-16" min="2.3">
+			- Updated MailChimp API to 2.0
+			- Allow overwriting of List ID (used as default)
+			- Update of Event to return similar fields to Symphony events
 		</release>
-		<release version="1.20" date="2013-03-08" min="2.3.x">
-		- Added support for redirect on success.
+		<release version="1.21" date="2013-09-27" min="2.3">
+			- Fixed Ajax issue (nitriques)
 		</release>
-		<release version="1.19" date="2012-05-20" min="2.3.x" />
+		<release version="1.20" date="2013-03-08" min="2.3">
+			- Added support for redirect on success.
+		</release>
+		<release version="1.19" date="2012-05-20" min="2.3" />
 		<release version="1.18" date="2011-12-11" min="2.2" max="2.2.5" />
 	</releases>
 </extension>

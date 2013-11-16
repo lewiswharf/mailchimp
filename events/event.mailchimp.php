@@ -3,7 +3,6 @@
 	if(!defined('__IN_SYMPHONY__')) die('<h2>Error</h2><p>You cannot directly access this file</p>');
 
 	include_once(EXTENSIONS . '/mailchimp/lib/mailchimp-api/MailChimp.class.php');
-	include_once(EXTENSIONS . '/mailchimp/lib/class.mcapi.php');
 
 	Class eventMailchimp extends Event
 	{

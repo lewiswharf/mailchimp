@@ -15,10 +15,21 @@ The MailChimp extension allows users to subscribe to a list and supports unlimit
 	1. Link javascript file `/extensions/mailchimp/assets/subscribe.js`
 	2. Call plugin.
 
-			$('#the-form').mailchimp({
-				complete: completeCallback(data),
-				error: errorCallback(data) // data.error -> error message
-			})
+````js
+var completeCallback = function (data) {
+  ...
+};
+var errorCallback = function (data) {
+  alert(data.error);
+}
+
+$(function () {
+  $('#the-form').mailChimp({
+    complete: completeCallback,
+    error: errorCallback 
+  })
+});
+````
 
 	Note: In the callbacks (error and complete) the context of the function (the "this" keyword) will be
 	set to #the-form. The "data" parameters contains all the values in the event XML as JSON.

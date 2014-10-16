@@ -17,8 +17,16 @@
 			<name github="brendo" symphony="brendo">Brendan Abbott</name>
 			<website>http://www.bloodbone.ws</website>
 		</author>
+		<author>
+			<name github="DeuxHuitHuit" symphony="nitriques" twitter="DeuxHuitHuit">Deux Huit Huit</name>
+			<website>https://deuxhuithuit.com/</website>
+		</author>
 	</authors>
 	<releases>
+		<release version="2.1" date="2014-10-16" min="2.3" max="2.5.x">
+			- Updated submodule drewm/mailchimp-api to latest version
+			- Added js snippet in the readme
+		</release>
 		<release version="2.0" date="2013-11-16" min="2.3">
 			- Updated MailChimp API to 2.0
 			- Allow overwriting of List ID (used as default)

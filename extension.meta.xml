@@ -23,6 +23,9 @@
 		</author>
 	</authors>
 	<releases>
+		<release version="2.1.1" date="2014-10-30" min="2.3" max="2.5.x">
+			- Fixed issue with renamed core method (saveConfig -> write)
+		</release>
 		<release version="2.1" date="2014-10-16" min="2.3" max="2.5.x">
 			- Updated submodule drewm/mailchimp-api to latest version
 			- Added js snippet in the readme

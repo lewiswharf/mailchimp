@@ -4,7 +4,7 @@
 
 	include_once(EXTENSIONS . '/mailchimp/lib/mailchimp-api/MailChimp.php');
 
-	use Drewm\MailChimp;
+	use \MailChimp;
 
 	Class eventMailchimp extends Event
 	{
@@ -120,6 +120,7 @@
 			);
 
 			// Are we merging?
+			try {
 			$mergeVars = $api->call('lists/merge-vars', array(
 				'id' => array(
 					$list
@@ -184,7 +185,11 @@
 			$post_values = new XMLElement("post-values");
 			General::array_to_xml($post_values, $fields);
 			$result->appendChild($post_values);
-
+			}
+			catch (Exception $ex) {
+			   $error = new XMLElement('error', General::wrapInCDATA($ex->getMessage()));
+			   $result->appendChild($error);
+			}
 			return $result;
 		}
 	}

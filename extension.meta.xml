@@ -23,6 +23,10 @@
 		</author>
 	</authors>
 	<releases>
+		<release version="2.1.2" date="2015-02-20" min="2.3" max="2.5.x">
+			- Fixed issue with email already subscribed API response
+			- Fixed issue with namespace of Class 'Drewm\MailChimp' not found
+		</release>
 		<release version="2.1.1" date="2014-10-30" min="2.3" max="2.5.x">
 			- Fixed issue with renamed core method (saveConfig -> write)
 		</release>

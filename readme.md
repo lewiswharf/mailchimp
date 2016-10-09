@@ -67,11 +67,13 @@ $(function () {
 		</xsl:otherwise>
 	</xsl:choose>
 	
+
 ##Notes
 
 + E-mail field must be lowercase as portrayed above.
 + Merge fields must have `merge` lowercase and match a Mailchimp field (i.e. `merge[SOME_FIELD]` whereby 'SOME_FIELD' must match exactly).
 + Merge fields must be passed in the form, but they can be hidden if desired.
++ To subscribe the user to multiple lists, simply add the list using commas (i.e. `list-1,list-2,list-3`).
 
 
 ##Change Log

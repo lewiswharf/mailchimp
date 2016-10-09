@@ -87,7 +87,7 @@
 			$result = new XMLElement("mailchimp");
 
 			$email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
-			$list = (isset($_POST['list'])) ? $_POST['list'] : $this->_driver->getList();
+			$lists = (isset($_POST['list'])) ? $_POST['list'] : $this->_driver->getList();
 
 			// For post values
 			$fields = $_POST;
@@ -105,91 +105,98 @@
 				return $result;
 			}
 
-			// Default subscribe parameters
-			$params = array(
-				'email' => array(
-					'email' => $email
-				),
-				'id' => $list,
-				'merge_vars' => array(),
-				'email_type' => ($fields['email_type']) ? $fields['email_type'] : 'html',
-				'double_optin' => ($fields['double_optin']) ? $fields['double_optin'] == 'yes' : true,
-				'update_existing' => ($fields['update_existing']) ? $fields['update_existing'] == 'yes' : false,
-				'replace_interests' => ($fields['replace_interests']) ? $fields['replace_interests'] == 'yes' : true,
-				'send_welcome' => ($fields['send_welcome']) ? $fields['send_welcome'] == 'yes' : false
-			);
+			$explodedLists = explode(',', $lists);
 
-			// Are we merging?
-			try {
-			$mergeVars = $api->call('lists/merge-vars', array(
-				'id' => array(
-					$list
-				)
-			));
-			$mergeVars = ($mergeVars['success_count']) 
-				? $mergeVars['data'][0]['merge_vars']
-				: array();
+			foreach ($explodedLists as $list) {
 
-			if(count($mergeVars) > 1 && isset($fields['merge'])) {
-				$merge = $fields['merge'];
-				foreach($merge as $key => $val)
-				{
-					if(!empty($val)) {
-						$params['merge_vars'][$key] = $val;
-					}
-					else {
-						unset($fields['merge'][$key]);
-					}
-				}
-			}
+				// Default subscribe parameters
+				$params = array(
+					'email' => array(
+						'email' => $email
+					),
+					'id' => $list,
+					'merge_vars' => array(),
+					'email_type' => ($fields['email_type']) ? $fields['email_type'] : 'html',
+					'double_optin' => ($fields['double_optin']) ? $fields['double_optin'] == 'yes' : true,
+					'update_existing' => ($fields['update_existing']) ? $fields['update_existing'] == 'yes' : false,
+					'replace_interests' => ($fields['replace_interests']) ? $fields['replace_interests'] == 'yes' : true,
+					'send_welcome' => ($fields['send_welcome']) ? $fields['send_welcome'] == 'yes' : false
+				);
 
-			// Subscribe the user
-			$api_result = $api->call('lists/subscribe', $params);
-			if($api_result['status'] == 'error') {
-				$result->setAttribute("result", "error");
+				// Are we merging?
+				try {
+				$mergeVars = $api->call('lists/merge-vars', array(
+					'id' => array(
+						$list
+					)
+				));
+				
+				$mergeVars = ($mergeVars['success_count']) 
+					? $mergeVars['data'][0]['merge_vars']
+					: array();
 
-				// try to match mergeVars with error
-				if(count($mergeVars) > 1) {
-					// replace
-					foreach($mergeVars as $var) {
-						$errorMessage = str_replace($var['tag'], $var['name'], $api_result['error'], $count);
-						if($count == 1) {
-							$error = new XMLElement("message", $errorMessage);
-							break;
+				if(count($mergeVars) > 1 && isset($fields['merge'])) {
+					$merge = $fields['merge'];
+					foreach($merge as $key => $val)
+					{
+						if(!empty($val)) {
+							$params['merge_vars'][$key] = $val;
+						}
+						else {
+							unset($fields['merge'][$key]);
 						}
 					}
 				}
+				
+				// Subscribe the user
+				$api_result = $api->call('lists/subscribe', $params);
+				if($api_result['status'] == 'error') {
+					$result->setAttribute("result", "error");
 
-				// no error message found with merge vars in it
-				if ($error == null) {
-					$msg = General::sanitize($api_result['error']);
-					$error = new XMLElement("message", strlen($msg) > 0 ? $msg : 'Unknown error', array(
-						'code' => $api_result['code'],
-						'name' => $api_result['name']
-					));
+					// try to match mergeVars with error
+					if(count($mergeVars) > 1) {
+						// replace
+						foreach($mergeVars as $var) {
+							$errorMessage = str_replace($var['tag'], $var['name'], $api_result['error'], $count);
+							if($count == 1) {
+								$error = new XMLElement("message", $errorMessage);
+								break;
+							}
+						}
+					}
+
+					// no error message found with merge vars in it
+					if ($error == null) {
+						$msg = General::sanitize($api_result['error']);
+						$error = new XMLElement("message", strlen($msg) > 0 ? $msg : 'Unknown error', array(
+							'code' => $api_result['code'],
+							'name' => $api_result['name']
+						));
+					}
+
+					$result->appendChild($error);
+				}
+				else if(isset($_REQUEST['redirect'])) {
+					redirect($_REQUEST['redirect']);
+				}
+				else {
+					$result->setAttribute("result", "success");
+					$result->appendChild(
+						new XMLElement('message', __('Subscriber added to list successfully'))
+					);
 				}
 
-				$result->appendChild($error);
+				// Set the post values
+				$post_values = new XMLElement("post-values");
+				General::array_to_xml($post_values, $fields);
+				$result->appendChild($post_values);
+				}
+				catch (Exception $ex) {
+					$error = new XMLElement('error', General::wrapInCDATA($ex->getMessage()));
+					$result->appendChild($error);
+				}
 			}
-			else if(isset($_REQUEST['redirect'])) {
-				redirect($_REQUEST['redirect']);
-			}
-			else {
-				$result->setAttribute("result", "success");
-				$result->appendChild(
-					new XMLElement('message', __('Subscriber added to list successfully'))
-				);
-			}
-
-			// Set the post values
-			$post_values = new XMLElement("post-values");
-			General::array_to_xml($post_values, $fields);
-			$result->appendChild($post_values);
-			}
-			catch (Exception $ex) {
-			   $error = new XMLElement('error', General::wrapInCDATA($ex->getMessage()));
-			   $result->appendChild($error);
-			}
+			
 			return $result;
 		}
 	}

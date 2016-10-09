@@ -2,9 +2,9 @@
 
 	if(!defined('__IN_SYMPHONY__')) die('<h2>Error</h2><p>You cannot directly access this file</p>');
 
-	include_once(EXTENSIONS . '/mailchimp/lib/mailchimp-api/MailChimp.php');
+	include_once(EXTENSIONS . '/mailchimp/lib/mailchimp-api/src/Drewm/MailChimp.php');
 
-	use \MailChimp;
+	use \Drewm\MailChimp;
 
 	Class eventMailchimp extends Event
 	{

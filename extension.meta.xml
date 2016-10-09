@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<extension id="mailchimp" status="released" xmlns="http://symphony-cms.com/schemas/extension/1.0">
+<extension id="mailchimp" status="released" xmlns="http://getsymphony.com/schemas/extension/1.0">
 	<name>MailChimp</name>
 	<description>Subscribe users to a MailChimp mailing list</description>
 	<repo type="github">https://github.com/lewiswharf/mailchimp</repo>
 	<url type="discuss">http://getsymphony.com/discuss/thread/32883/</url>
+	<url type="issues">https://github.com/lewiswharf/mailchimp/issues</url>
 	<types>
 		<type>Events</type>
 		<type>Third Party Integration</type>
@@ -23,6 +24,11 @@
 		</author>
 	</authors>
 	<releases>
+		<release version="2.2.0" date="2016-10-09" min="2.5.0" max="2.6.x">
+			- Fixed issue with namespace of Class 'Drewm\MailChimp' not found (again)
+			- Updated submodule drewm/mailchimp-api to latest version
+			- Added support to subscribe to multiple lists
+		</release>
 		<release version="2.1.2" date="2015-02-20" min="2.3" max="2.5.x">
 			- Fixed issue with email already subscribed API response
 			- Fixed issue with namespace of Class 'Drewm\MailChimp' not found

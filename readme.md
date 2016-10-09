@@ -24,7 +24,7 @@ var errorCallback = function (data) {
 }
 
 $(function () {
-  $('#the-form').mailChimp({
+  $('#the-form').mailchimp({
     complete: completeCallback,
     error: errorCallback 
   })

@@ -28,7 +28,7 @@
 			- Fixed issue with namespace of Class 'Drewm\MailChimp' not found
 		</release>
 		<release version="2.1.1" date="2014-10-30" min="2.3" max="2.5.x">
-			- Fixed issue with renamed core method (saveConfig -> write)
+			- Fixed issue with renamed core method (saveConfig -&gt; write)
 		</release>
 		<release version="2.1" date="2014-10-16" min="2.3" max="2.5.x">
 			- Updated submodule drewm/mailchimp-api to latest version
@@ -46,6 +46,35 @@
 			- Added support for redirect on success.
 		</release>
 		<release version="1.19" date="2012-05-20" min="2.3" />
-		<release version="1.18" date="2011-12-11" min="2.2" max="2.2.5" />
+		<release version="1.18" date="2011-12-11" min="2.2" max="2.2.5">
+			- Fix a bug to handle `&amp;` from MailChimp in error messages.
+		</release>
+		<release version="1.17">
+			- Fix a bug where $output could be `mixed` (Thanks nitriques).
+		</release>
+		<release version="1.16">
+			- A couple bug fixes including [issue #3](https://github.com/lewiswharf/mailchimp/issues/3).
+		</release>
+		<release version="1.15">
+			- Ajax bug fix.
+		</release>
+		<release version="1.14">
+			- Ajax capability added (Thanks nitriques).
+		</release>
+		<release version="1.13">
+			- Switched from login/password to using the API key for authentication. MailChimp has deprecated the former. Clarified directions regarding merge fields.
+		</release>
+		<release version="1.12">
+			- Updated wrapper for API 1.3
+		</release>
+		<release version="1.11">
+			- Fixed bug to allow email address only form
+		</release>
+		<release version="1.1">
+			- Updated for Symphony 2.2 and increased flexibility to handle infinite merge fields.
+		</release>
+		<release version="1.0">
+			- Initial build
+		</release>
 	</releases>
 </extension>

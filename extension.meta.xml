@@ -24,6 +24,11 @@
 		</author>
 	</authors>
 	<releases>
+		<release version="3.0.0" date="2017-01-18" min="2.5.0" max="2.6.x">
+			- Updated MailChimp API to 3.0
+			- Added check and custom error when email already in list
+			- Changed subscription call to add email to list or update if already in list
+		</release>
 		<release version="2.2.0" date="2016-10-09" min="2.5.0" max="2.6.x">
 			- Fixed issue with namespace of Class 'Drewm\MailChimp' not found (again)
 			- Updated submodule drewm/mailchimp-api to latest version

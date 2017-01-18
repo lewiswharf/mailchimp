@@ -2,9 +2,9 @@
 
 	if(!defined('__IN_SYMPHONY__')) die('<h2>Error</h2><p>You cannot directly access this file</p>');
 
-	include_once(EXTENSIONS . '/mailchimp/lib/mailchimp-api/src/Drewm/MailChimp.php');
+	include_once(EXTENSIONS . '/mailchimp/vendor/autoload.php');
 
-	use \Drewm\MailChimp;
+	use \DrewM\MailChimp\MailChimp;
 
 	Class eventMailchimp extends Event
 	{
@@ -23,8 +23,8 @@
 					'name' => 'Mark Lewis',
 					'website' => 'http://www.casadelewis.com',
 					'email' => 'mark@casadelewis.com'),
-				'version' => '2.0',
-				'release-date' => '2013-11-16',
+				'version' => '3.0.0',
+				'release-date' => '2017-01-18',
 				'trigger-condition' => 'action[subscribe]',
 				'source' => 'MailChimp extension'
 			);
@@ -56,13 +56,11 @@
 &lt;input name="merge[LNAME]" type="input" value="Lewis" /></code></pre>';
 
 			$docs .= '<p>Additionally, you can set any of the following options with hidden fields. If these fields are omitted the following are defaults:</p>
-			    <pre class="XML"><code>&lt;input name="email_type" type="input" value="html" />
-&lt;input name="double_optin" type="input" value="yes" />
-&lt;input name="update_existing" type="input" value="no" />
-&lt;input name="replace_interests" type="input" value="yes" />
-&lt;input name="send_welcome" type="input" value="no" /></code></pre>';
-
-			$docs .= '<p>Here\'s an example of some of the above options. A form that will update if the subscriber exists and sets their mail preference to mobile:</p>
+			    <pre class="XML"><code>&lt;input name="status" type="input" value="pending" /></code></pre>';
+			
+			$docs .= '<p>For possible values of status, check mailchimp doc here: <a href="https://developer.mailchimp.com/documentation/mailchimp/reference/lists/members/">https://developer.mailchimp.com/documentation/mailchimp/reference/lists/members/</a></p>';
+			
+			$docs .= '<p>Here\'s an example of some of the above options. A form that will add or update the subscriber without double opt in:</p>
 		        <pre class="XML"><code>&lt;form method="post" enctype="multipart/form-data">
 		  &lt;label>Email
 		    &lt;input name="email" type="email" />
@@ -73,8 +71,7 @@
 		  &lt;label>Last Name
 		    &lt;input name="merge[LNAME]" type="email" />
 		  &lt;/label>
-		  &lt;input name="update_existing" type="input" value="yes" />
-		  &lt;input name="email_type" type="input" value="mobile" />
+		  &lt;input name="status" type="input" value="subscribed" />
 		  &lt;input name="action[subscribe]" type="submit" value="Submit" />
 &lt;/form></code></pre>';
 
@@ -110,86 +107,70 @@
 			foreach ($explodedLists as $list) {
 
 				// Default subscribe parameters
+				$custom_status = $fields['status'];
 				$params = array(
-					'email' => array(
-						'email' => $email
-					),
-					'id' => $list,
-					'merge_vars' => array(),
-					'email_type' => ($fields['email_type']) ? $fields['email_type'] : 'html',
-					'double_optin' => ($fields['double_optin']) ? $fields['double_optin'] == 'yes' : true,
-					'update_existing' => ($fields['update_existing']) ? $fields['update_existing'] == 'yes' : false,
-					'replace_interests' => ($fields['replace_interests']) ? $fields['replace_interests'] == 'yes' : true,
-					'send_welcome' => ($fields['send_welcome']) ? $fields['send_welcome'] == 'yes' : false
+					'email_address' => $email,
+					//status = pending enables double opt in. Set to subscribed for no double opt in
+					'status' => ($custom_status) ? $custom_status : 'pending'
 				);
-
-				// Are we merging?
+				
 				try {
-				$mergeVars = $api->call('lists/merge-vars', array(
-					'id' => array(
-						$list
-					)
-				));
-				
-				$mergeVars = ($mergeVars['success_count']) 
-					? $mergeVars['data'][0]['merge_vars']
-					: array();
-
-				if(count($mergeVars) > 1 && isset($fields['merge'])) {
-					$merge = $fields['merge'];
-					foreach($merge as $key => $val)
-					{
-						if(!empty($val)) {
-							$params['merge_vars'][$key] = $val;
-						}
-						else {
-							unset($fields['merge'][$key]);
-						}
+					if (is_array($fields['merge'])) {
+						$params['merge_fields'] = $fields['merge'];
 					}
-				}
-				
-				// Subscribe the user
-				$api_result = $api->call('lists/subscribe', $params);
-				if($api_result['status'] == 'error') {
-					$result->setAttribute("result", "error");
-
-					// try to match mergeVars with error
-					if(count($mergeVars) > 1) {
-						// replace
-						foreach($mergeVars as $var) {
-							$errorMessage = str_replace($var['tag'], $var['name'], $api_result['error'], $count);
-							if($count == 1) {
-								$error = new XMLElement("message", $errorMessage);
-								break;
-							}
+					
+					// check if user already exists
+					$hash_email = $api->subscriberHash($email);
+					$check_result = $api->get("lists/$list/members/$hash_email");
+					$is_already_subscribed = isset($check_result['id']);
+					
+					//if status is default value and subscriber already in list, status must not be changed
+					if ($is_already_subscribed && !$custom_status && isset($check_result['status'])) {
+						$params['status'] = $check_result['status'];
+					}
+					
+					// Subscribe or update the user
+					$api_result = $api->put("lists/$list/members/$hash_email", $params);
+					
+					if ($is_already_subscribed) {
+						$result->setAttribute("result", "error");
+						
+						$error = new XMLElement("message", "Email address already in list.");
+						
+						$result->appendChild($error);
+						
+						$error = new XMLElement("code", "409");
+						
+						$result->appendChild($error);
+					}
+					elseif(General::intval($api_result['status']) > -1) {
+						$result->setAttribute("result", "error");
+						
+						// no error message found with merge vars in it
+						if ($error == null) {
+							$msg = General::sanitize($api_result['detail']);
+							$error = new XMLElement("message", strlen($msg) > 0 ? $msg : 'Unknown error', array(
+								'code' => $api_result['code'],
+								'name' => $api_result['name']
+							));
 						}
+
+						$result->appendChild($error);
+					}
+					else if(isset($_REQUEST['redirect'])) {
+						redirect($_REQUEST['redirect']);
+					}
+					else {
+						$result->setAttribute("result", "success");
+						$result->appendChild(
+							new XMLElement('message', __('Subscriber added to list successfully'))
+						);
 					}
 
-					// no error message found with merge vars in it
-					if ($error == null) {
-						$msg = General::sanitize($api_result['error']);
-						$error = new XMLElement("message", strlen($msg) > 0 ? $msg : 'Unknown error', array(
-							'code' => $api_result['code'],
-							'name' => $api_result['name']
-						));
-					}
-
-					$result->appendChild($error);
-				}
-				else if(isset($_REQUEST['redirect'])) {
-					redirect($_REQUEST['redirect']);
-				}
-				else {
-					$result->setAttribute("result", "success");
-					$result->appendChild(
-						new XMLElement('message', __('Subscriber added to list successfully'))
-					);
-				}
-
-				// Set the post values
-				$post_values = new XMLElement("post-values");
-				General::array_to_xml($post_values, $fields);
-				$result->appendChild($post_values);
+					// Set the post values
+					$post_values = new XMLElement("post-values");
+					General::array_to_xml($post_values, $fields);
+					$result->appendChild($post_values);
 				}
 				catch (Exception $ex) {
 					$error = new XMLElement('error', General::wrapInCDATA($ex->getMessage()));
@@ -200,5 +181,5 @@
 			return $result;
 		}
 	}
-
+	
 ?>

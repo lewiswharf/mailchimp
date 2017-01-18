@@ -24,7 +24,7 @@ var errorCallback = function (data) {
 }
 
 $(function () {
-  $('#the-form').mailchimp({
+  $('#the-form').mailChimp({
     complete: completeCallback,
     error: errorCallback 
   })
@@ -67,10 +67,22 @@ $(function () {
 		</xsl:otherwise>
 	</xsl:choose>
 	
-
 ##Notes
 
 + E-mail field must be lowercase as portrayed above.
 + Merge fields must have `merge` lowercase and match a Mailchimp field (i.e. `merge[SOME_FIELD]` whereby 'SOME_FIELD' must match exactly).
 + Merge fields must be passed in the form, but they can be hidden if desired.
-+ To subscribe the user to multiple lists, simply add the list using commas (i.e. `list-1,list-2,list-3`).
+
+
+##Change Log
++ 2.0 - Upgrade wrapper to API 2. Allow List ID to be overidden
++ 1.18 - Fix a bug to handle `&` from MailChimp in error messages.
++ 1.17 - Fix a bug where $output could be `mixed` (Thanks nitriques).
++ 1.16 - A couple bug fixes including [issue #3](https://github.com/lewiswharf/mailchimp/issues/3).
++ 1.15 - Ajax bug fix.
++ 1.14 - Ajax capability added (Thanks nitriques).
++ 1.13 - Switched from login/password to using the API key for authentication. MailChimp has deprecated the former. Clarified directions regarding merge fields.
++ 1.12 - Updated wrapper for API 1.3
++ 1.11 - Fixed bug to allow email address only form
++ 1.1  - Updated for Symphony 2.2 and increased flexibility to handle infinite merge fields.
++ 1.0  - Initial build

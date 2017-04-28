@@ -55,7 +55,7 @@ class extension_mailchimp extends Extension{
             'settings[mailchimp][key]', General::Sanitize($this->getKey())
         ));
         $api->appendChild(
-            new XMLElement('p', Widget::Anchor(__('Generate your API Key'), 'http://kb.mailchimp.com/article/where-can-i-find-my-api-key'), array(
+            new XMLElement('p', Widget::Anchor(__('Generate your API Key'), 'http://kb.mailchimp.com/article/where-can-i-find-my-api-key', null, null, null, array('target' => '_blank')), array(
                 'class' => 'help'
             ))
         );

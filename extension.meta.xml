@@ -24,6 +24,9 @@
 		</author>
 	</authors>
 	<releases>
+		<release version="4.0.0" date="TBA" min="4.0.0" max="4.x.x" php-min="5.6.x" php-max="7.x.x">
+			- Update for 4.x
+		</release>
 		<release version="3.0.1" date="2017-02-28" min="2.6.0" max="2.6.x">
 			- Fix an error with the core JSONPage
 		</release>

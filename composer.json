@@ -1,5 +1,5 @@
 {
     "require": {
-        "drewm/mailchimp-api": "^2.3"
+        "drewm/mailchimp-api": "^2.*"
     }
 }

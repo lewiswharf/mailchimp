@@ -1,3 +1,0 @@
-[submodule "lib/mailchimp-api"]
-	path = lib/mailchimp-api
-	url = git@github.com:drewm/mailchimp-api.git

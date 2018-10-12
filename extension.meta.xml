@@ -24,6 +24,9 @@
 		</author>
 	</authors>
 	<releases>
+		<release version="3.0.2" date="2018-10-11" min="2.6.0" max="2.x.x">
+			- Update drewm\Mailchimp to 2.5
+		</release>
 		<release version="3.0.1" date="2017-02-28" min="2.6.0" max="2.6.x">
 			- Fix an error with the core JSONPage
 		</release>

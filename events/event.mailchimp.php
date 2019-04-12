@@ -118,7 +118,13 @@ wish to override this, you can by passing a new list ID in your form:</p>
                 if (is_array($fields['merge'])) {
                     $params['merge_fields'] = $fields['merge'];
                 }
-                
+
+                if (is_array($fields['interests'])) {
+                    foreach ($fields['interests'] as $key => $value) {
+                        $params['interests'][$key] = $value === 'true';
+                    }
+                }
+
                 // check if user already exists
                 $hash_email = $api->subscriberHash($email);
                 $check_result = $api->get("lists/$list/members/$hash_email");
@@ -128,7 +134,7 @@ wish to override this, you can by passing a new list ID in your form:</p>
                 if ($is_already_subscribed && !$custom_status && isset($check_result['status'])) {
                     $params['status'] = $check_result['status'];
                 }
-                
+
                 // Subscribe or update the user
                 $api_result = $api->put("lists/$list/members/$hash_email", $params);
                 

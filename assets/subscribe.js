@@ -6,84 +6,96 @@
  * Basic Usage
  *
  * $('#the-form').mailchimp({
- *      complete: completeCallback(data), // this is set to #the-form
- *      error: errorCallback(data) // data.error -> error message
+ * 		success: completeCallback(t, data)
+ * 		complete: completeCallback(t, data), // this is set to #the-form
+ * 		error: errorCallback(t, data) // data.error -> error message
+ * });
+ * 
+ * window.mailchimp.submit($('#the-form'), {
+ * 
  * });
  *
  * @author nicolasbrassard - http://www.nitriques.com
  *  */
 
 (function ($, undefined) {
+	'use strict';
 
-    var defaults = {
-        complete : $.noop,
-        error: $.noop,
-        url: '/symphony/extension/mailchimp/login/'
-    };
+	var defaults = {
+		complete: $.noop,
+		error: $.noop,
+		url: '/symphony/extension/mailchimp/login/'
+	};
 
-    // actual plugin
-    function mailchimp(options) {
-        var t = $(this),
-            opts = $.extend({}, defaults, options);
+	var sendForm = function (form, options, e) {
 
-        if (!t || !t.length) {
-            return this;
-        }
+		if (e) {
+			e.preventDefault();
+		}
 
-        function hookOne(index, value) {
-            var t = $(this); // current element, represents the form container
+		// gets the POST params
+		var data = form.serialize();
 
-            // actual subscription
-            function ajax(e) {
-                if (e) {
-                    e.preventDefault();
-                }
+		// adds the button field
+		data += '&' + window.escape('action[subscribe]') + '=Send';
 
-                // gets the POST params
-                var data = t.serialize();
+		// ajax request
+		$.ajax({
+			type: 'POST',
+			url: options.url,
+			data: data,
+			dataType: 'json',
+			success: function (data) {
+				if (!data.error && data['@attributes'] && data['@attributes'].result == 'success') {
+					if (data['@attributes'].result) {
+						if ($.isFunction(options.success)) {
+							options.success(form, data);
+						}
+					}
+				} else if ($.isFunction(options.error)) {
+					options.error(form, data);
+				}
+			},
+			error: function (data) {
+				if ($.isFunction(options.error)) {
+					options.error(form, data);
+				}
+			},
+			complete: function (data) {
+				if ($.isFunction(options.complete)) {
+					options.complete(form, data);
+				}
+			}
+		});
 
-                // adds the button field
-                data += '&' + escape('action[subscribe]') + '=Send';
+		return false;
+	};
 
-                // ajax request
-                $.ajax({
-                    type: 'POST',
-                    url: opts.url,
-                    data: data,
-                    dataType: 'json',
-                    success: function (data) {
-                        if (!data.error && data['@attributes'] && data['@attributes'].result == 'success') {
-                            if (data['@attributes'].result) {
+	// actual plugin
+	var mailchimp = function (options) {
+		var t = $(this);
+		var opts = $.extend({}, defaults, options);
 
-                                if ($.isFunction(opts.complete)) {
-                                    opts.complete.call(t, data);
-                                }
-                            }
-                        } else if ($.isFunction(opts.error)) {
-                            opts.error.call(t, data);
-                        }
-                    } ,
-                    error: function (data) {
-                        if ($.isFunction(opts.error)) {
-                            opts.error.call(t, data);
-                        }
-                    }
-                });
+		if (!t || !t.length) {
+			return this;
+		}
 
-                return false;
-            };
+		var hookOne = function (index) {
+			return sendForm($(this), opts);
+		};
 
-            // hook submit form
-            t.submit(ajax);
-        }
+		return t.each(hookOne);
+	};
 
-        return t.each(hookOne);
-    };
+	// extend fn object
+	// should be called on <form> element
+	$.fn.extend({
+		mailchimp: mailchimp
+	});
 
-    // extend fn object
-    // should be called on <form> element
-    $.fn.extend({
-        mailchimp: mailchimp
-    });
+	window.mailchimp = {};
+	window.mailchimp.submit = function (form, options, e) {
+		return sendForm(form, $.extend({}, defaults, options), e);
+	};
 
 })(jQuery);
